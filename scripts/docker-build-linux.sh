@@ -8,7 +8,7 @@ cd "$ROOT"
 IMAGE="zaino-ai-agent:build"
 
 echo "==> building docker image ($IMAGE)"
-docker build -f "$ROOT/Dockerfile.build" -t "$IMAGE" "$ROOT" .
+docker build -f "$ROOT/Dockerfile.build" -t "$IMAGE" "$ROOT"
 
 echo "==> extracting artifacts"
 docker create --name zaino-out "$IMAGE" >/dev/null

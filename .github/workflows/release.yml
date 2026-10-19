@@ -133,7 +133,7 @@ jobs:
       # Single-binary app (openssl vendored, no daemon subcomponent), so Tauri
       # can codesign mid-bundle — unlike the 0.9.x flow that re-signed after.
       # With TAURI_SIGNING_PRIVATE_KEY set, `createUpdaterArtifacts` also emits
-      # "CC GUI.app.tar.gz" + .sig for the updater channel.
+      # "Zaino AI Agent.app.tar.gz" + .sig for the updater channel.
       - name: Build app bundle (signed)
         env:
           NODE_OPTIONS: "--max-old-space-size=8192"
@@ -240,20 +240,20 @@ jobs:
           mkdir -p release-artifacts
 
           mv src-tauri/target/release/bundle/dmg/*.dmg \
-            "release-artifacts/ccgui_${VERSION}_${ARCH}.dmg"
-          mv "src-tauri/target/release/bundle/macos/CC GUI.app.tar.gz" \
-            "release-artifacts/ccgui_${ARCH}.app.tar.gz"
-          mv "src-tauri/target/release/bundle/macos/CC GUI.app.tar.gz.sig" \
-            "release-artifacts/ccgui_${ARCH}.app.tar.gz.sig"
+            "release-artifacts/zaino-ai-agent_${VERSION}_${ARCH}.dmg"
+          mv "src-tauri/target/release/bundle/macos/Zaino AI Agent.app.tar.gz" \
+            "release-artifacts/zaino-ai-agent_${ARCH}.app.tar.gz"
+          mv "src-tauri/target/release/bundle/macos/Zaino AI Agent.app.tar.gz.sig" \
+            "release-artifacts/zaino-ai-agent_${ARCH}.app.tar.gz.sig"
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.arch }}
           path: |
-            release-artifacts/ccgui_*_${{ matrix.arch }}.dmg
-            release-artifacts/ccgui_${{ matrix.arch }}.app.tar.gz
-            release-artifacts/ccgui_${{ matrix.arch }}.app.tar.gz.sig
+            release-artifacts/zaino-ai-agent_*_${{ matrix.arch }}.dmg
+            release-artifacts/zaino-ai-agent_${{ matrix.arch }}.app.tar.gz
+            release-artifacts/zaino-ai-agent_${{ matrix.arch }}.app.tar.gz.sig
           if-no-files-found: error
 
   build_linux:
@@ -495,8 +495,8 @@ jobs:
           PY
           )
 
-          SIGNATURE_AARCH64=$(cat release-artifacts/ccgui_aarch64.app.tar.gz.sig)
-          SIGNATURE_X86_64=$(cat release-artifacts/ccgui_x86_64.app.tar.gz.sig)
+          SIGNATURE_AARCH64=$(cat release-artifacts/zaino-ai-agent_aarch64.app.tar.gz.sig)
+          SIGNATURE_X86_64=$(cat release-artifacts/zaino-ai-agent_x86_64.app.tar.gz.sig)
           LAST_TAG=$(git tag --sort=-version:refname \
             | grep -v "^v${VERSION}$" \
             | head -n 1 || true)
@@ -554,11 +554,11 @@ jobs:
 
           platforms = {
             "darwin-aarch64": {
-              "url": "https://github.com/Louay0007/zaino-ai-agent/releases/download/v${VERSION}/ccgui_aarch64.app.tar.gz",
+              "url": "https://github.com/Louay0007/zaino-ai-agent/releases/download/v${VERSION}/zaino-ai-agent_aarch64.app.tar.gz",
               "signature": "${SIGNATURE_AARCH64}",
             },
             "darwin-x86_64": {
-              "url": "https://github.com/Louay0007/zaino-ai-agent/releases/download/v${VERSION}/ccgui_x86_64.app.tar.gz",
+              "url": "https://github.com/Louay0007/zaino-ai-agent/releases/download/v${VERSION}/zaino-ai-agent_x86_64.app.tar.gz",
               "signature": "${SIGNATURE_X86_64}",
             }
           }
@@ -566,8 +566,8 @@ jobs:
           appimages = list(artifacts_dir.rglob("*.AppImage"))
 
           # GitHub sanitizes uploaded asset names (spaces become dots — e.g.
-          # "CC GUI_1.0.1_x64-setup.exe" is stored as "CC.GUI_..."), while
-          # tauri emits bundles with the literal productName ("CC GUI").
+          # "Zaino AI Agent_1.0.1_x64-setup.exe" is stored as "Zaino.AI.Agent_..."), while
+          # tauri emits bundles with the literal productName ("Zaino AI Agent").
           # latest.json must point at the sanitized name or the updater's
           # download step 404s (v1.0.0/v1.0.1 Windows+Linux hit this).
           def asset_name(name):
@@ -628,12 +628,12 @@ jobs:
 
           ASSETS=()
           for pattern in \
-            "release-artifacts/ccgui_${VERSION}_aarch64.dmg" \
-            "release-artifacts/ccgui_${VERSION}_x86_64.dmg" \
-            "release-artifacts/ccgui_aarch64.app.tar.gz" \
-            "release-artifacts/ccgui_aarch64.app.tar.gz.sig" \
-            "release-artifacts/ccgui_x86_64.app.tar.gz" \
-            "release-artifacts/ccgui_x86_64.app.tar.gz.sig" \
+            "release-artifacts/zaino-ai-agent_${VERSION}_aarch64.dmg" \
+            "release-artifacts/zaino-ai-agent_${VERSION}_x86_64.dmg" \
+            "release-artifacts/zaino-ai-agent_aarch64.app.tar.gz" \
+            "release-artifacts/zaino-ai-agent_aarch64.app.tar.gz.sig" \
+            "release-artifacts/zaino-ai-agent_x86_64.app.tar.gz" \
+            "release-artifacts/zaino-ai-agent_x86_64.app.tar.gz.sig" \
             "release-artifacts/*.AppImage" \
             "release-artifacts/*.AppImage.sig" \
             "release-artifacts/*.rpm" \

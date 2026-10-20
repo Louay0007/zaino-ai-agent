@@ -1,12 +1,12 @@
 import { lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import Settings from "lucide-react/dist/esm/icons/settings";
-import PawPrint from "lucide-react/dist/esm/icons/paw-print";
+
 import Keyboard from "lucide-react/dist/esm/icons/keyboard";
 import Globe from "lucide-react/dist/esm/icons/globe";
 import FolderSymlink from "lucide-react/dist/esm/icons/folder-symlink";
 import Archive from "lucide-react/dist/esm/icons/archive";
-import Info from "lucide-react/dist/esm/icons/info";
+
 import Activity from "lucide-react/dist/esm/icons/activity";
 import FlaskConical from "lucide-react/dist/esm/icons/flask-conical";
 import RefreshCw from "lucide-react/dist/esm/icons/refresh-cw";
@@ -23,13 +23,13 @@ import i18n from "@/lib/i18n";
 import { settingsRegistry } from "@ccgui/plugin-sdk";
 import { GeneralSection } from "./GeneralSection";
 import { GatewaySection } from "../gateway/GatewaySection";
-import { PetSection } from "./PetSection";
+
 import { ProxySection } from "./ProxySection";
 import { WorkspacesSection } from "./WorkspacesSection";
 import { ArchivedSessionsSection } from "./ArchivedSessionsSection";
 import { BotsPane } from "./agents-prompts/BotsPane";
 import { PromptsPane } from "./agents-prompts/PromptsPane";
-import { AboutSection } from "./AboutSection";
+
 import { PerformanceDiagnosticsSection } from "./PerformanceDiagnostics";
 import { BetaFeaturesSection } from "./BetaFeaturesSection";
 import { UpdateSection } from "./UpdateSection";
@@ -231,15 +231,7 @@ settingsRegistry.register({
 //   order: 2,
 //   component: LazyComputerUseSection,
 // });
-settingsRegistry.register({
-  id: "pet",
-  key: "pet",
-  label: () => i18n.t("settings.pet"),
-  icon: PawPrint,
-  group: "misc",
-  order: 4,
-  component: PetSection,
-});
+
 settingsRegistry.register({
   id: "update",
   key: "update",
@@ -249,15 +241,7 @@ settingsRegistry.register({
   order: 1,
   component: UpdateSection,
 });
-settingsRegistry.register({
-  id: "about",
-  key: "about",
-  label: () => i18n.t("settings.about"),
-  icon: Info,
-  group: "misc",
-  order: 2,
-  component: AboutSection,
-});
+
 settingsRegistry.register({
   id: "diagnostics",
   key: "diagnostics",

@@ -142,30 +142,6 @@ const generalEntries: SettingsSearchEntry[] = [
   },
 ];
 
-/** 桌面宠物 (`PetSection.tsx`): row labels are 显示桌面宠物 / 角色 / 宠物大小;
- *  the page title is itself 桌面宠物, so the page-title lane finds the name a
- *  user remembers, and the `pet` aliases cover English searches. */
-const petEntries: SettingsSearchEntry[] = [
-  {
-    page: "pet",
-    anchor: "petEnabled",
-    labelKey: "settings.petEnabled",
-    keywords: ["pet", "spritesheet"],
-  },
-  {
-    page: "pet",
-    anchor: "petCharacter",
-    labelKey: "settings.petCharacter",
-    keywords: ["pet"],
-  },
-  {
-    page: "pet",
-    anchor: "petScale",
-    labelKey: "settings.petScale",
-    keywords: ["pet"],
-  },
-];
-
 /** 快捷键 (`ShortcutsSection.tsx`): one row per action in the metadata table,
  *  breadcrumbed by its group (会话 / 应用 / 面板 …). The page's own filter box
  *  is unrelated — it narrows the page, not the searched index. */
@@ -325,9 +301,6 @@ const workspaceEntries: SettingsSearchEntry[] = [
 
 export const builtinSearchEntries: SettingsSearchEntry[] = [
   ...generalEntries,
-
-  // 桌面宠物（其他）
-  ...petEntries,
 
   // 网络代理
   {

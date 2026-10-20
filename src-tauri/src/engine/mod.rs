@@ -453,12 +453,26 @@ fn list_engines_blocking() -> Vec<EngineInfo> {
         .iter()
         .map(|id| {
             let engine = engine_by_id(id).expect("known engine");
-            let available = match settings.bin_override(id) {
-                Some(custom) if !custom.trim().is_empty() => {
-                    crate::settings::validate_bin_override(custom).is_ok()
+            // Zaino Desktop: the Claude engine is the built-in Zaino AI
+            // provider — it talks to our gateway through the loopback proxy,
+            // not to a local Claude CLI binary. Always mark it available so
+            // users never see "No CLI enabled" after installing the app.
+            let is_zaino_gateway = *id == "claude"
+                && config
+                    .section(id)
+                    .and_then(|s| s.current.as_deref())
+                    .map(|p| p == "zaino-v1")
+                    .unwrap_or(false);
+            let available = if is_zaino_gateway {
+                true
+            } else {
+                match settings.bin_override(id) {
+                    Some(custom) if !custom.trim().is_empty() => {
+                        crate::settings::validate_bin_override(custom).is_ok()
+                    }
+                    _ if *id == "codex" && codex_bin_from_home(&settings).is_some() => true,
+                    _ => resolve::find_cli_binary(cli_binary_name(id), None).is_some(),
                 }
-                _ if *id == "codex" && codex_bin_from_home(&settings).is_some() => true,
-                _ => resolve::find_cli_binary(cli_binary_name(id), None).is_some(),
             };
             EngineInfo {
                 id: id.to_string(),

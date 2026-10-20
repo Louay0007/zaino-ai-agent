@@ -26,12 +26,16 @@ export function filterEngineOptions(
     if (!e.enabled) return [];
     if (allowed && !allowed.has(e.id)) return [];
     const delegated = allowed !== null;
-    if (!delegated && !e.available) return [];
+    // Zaino AI is a built-in provider that talks to our gateway through
+    // the loopback proxy — no local Claude CLI binary needed. Always
+    // treat it as available so users never see "No CLI enabled".
+    const zainoBuiltin = true;
+    if (!delegated && !zainoBuiltin && !e.available) return [];
     return [
       {
         id: e.id,
         label: "Zaino AI",
-        available: delegated || e.available,
+        available: delegated || zainoBuiltin || e.available,
         disabled: false,
         disabledReason: t("chat.engineNotInstalled"),
       },

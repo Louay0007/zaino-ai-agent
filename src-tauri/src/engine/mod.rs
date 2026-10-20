@@ -437,7 +437,26 @@ pub(crate) fn engine_bin(settings: &crate::settings::AppSettings, engine_id: &st
             return from_home;
         }
     }
-    resolve::resolve_launchable_cli_binary(cli_binary_name(engine_id))
+    let resolved = resolve::resolve_launchable_cli_binary(cli_binary_name(engine_id));
+    // Zaino Desktop: when the Claude engine uses the gateway provider and no
+    // local CLI binary exists, fall back to npx so the app can run
+    // `npx @anthropic-ai/claude-code` without requiring a pre-installed binary.
+    // The gateway proxy handles auth; the CLI just speaks stream-json over it.
+    if engine_id == "claude" && resolved.is_empty() {
+        let config = crate::config::read_config().unwrap_or_default();
+        let is_gateway = config
+            .section(engine_id)
+            .and_then(|s| s.current.as_deref())
+            .map(|p| p == "zaino-v1")
+            .unwrap_or(false);
+        if is_gateway {
+            let npx = resolve::resolve_launchable_cli_binary("npx");
+            if !npx.is_empty() {
+                return npx;
+            }
+        }
+    }
+    resolved
 }
 #[tauri::command]
 pub async fn list_engines() -> Result<Vec<EngineInfo>, String> {

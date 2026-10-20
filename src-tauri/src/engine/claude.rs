@@ -70,6 +70,12 @@ impl Engine for ClaudeEngine {
 
     fn build_command(&self, req: &SendRequest, bin: &str) -> Result<BuiltCommand, String> {
         let mut cmd = command_for_binary(bin);
+        // Zaino Desktop: when no local Claude CLI is installed and the gateway
+        // provider is active, engine_bin() returns `npx`. npx requires the
+        // package name as its first argument before any CLI flags.
+        if bin.ends_with("npx") || bin.ends_with("npx.cmd") {
+            cmd.arg("@anthropic-ai/claude-code");
+        }
         cmd.arg("-p");
         cmd.arg("--input-format");
         cmd.arg("stream-json");
